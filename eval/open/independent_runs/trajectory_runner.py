@@ -43,7 +43,7 @@ class TrajectoryRunner:
     def __init__(self,
                  #llm_factory: LLMFactory,
                  agent: AgentABC,
-                 db_client: PostgresDBClient,
+                 db_client: PostgresDBClient | SQLliteDBClient,
                  evaluator: SimpleFactorioEvaluator,
                  config: EvalConfig,
                  process_id: int):
@@ -244,18 +244,27 @@ def create_factorio_instance(instance_id: int) -> FactorioInstance:
     return instance
 
 
-async def create_db_client() -> PostgresDBClient:
+async def create_db_client(use_sqlite: bool=True) -> PostgresDBClient | SQLliteDBClient:
     """Create database client with connection pool"""
-    return PostgresDBClient(
-        max_conversation_length=40,
-        min_connections=2,
-        max_connections=5,
-        host=os.getenv("SKILLS_DB_HOST"),
-        port=os.getenv("SKILLS_DB_PORT"),
-        dbname=os.getenv("SKILLS_DB_NAME"),
-        user=os.getenv("SKILLS_DB_USER"),
-        password=os.getenv("SKILLS_DB_PASSWORD")
-    )
+    if not use_sqlite:
+        return PostgresDBClient(
+            max_conversation_length=40,
+            min_connections=2,
+            max_connections=5,
+            host=os.getenv("SKILLS_DB_HOST"),
+            port=os.getenv("SKILLS_DB_PORT"),
+            dbname=os.getenv("SKILLS_DB_NAME"),
+            user=os.getenv("SKILLS_DB_USER"),
+            password=os.getenv("SKILLS_DB_PASSWORD")
+        )
+    else:
+        return SQLliteDBClient(
+            max_conversation_length=40,
+            min_connections=2,
+            max_connections=5,
+            # Provide the SQLite database file path
+            database_file=os.getenv("SQLITE_DB_FILE") #"mydatabase.db"
+        )
 
 
 async def run_trajectory(process_id: int, config: EvalConfig):
@@ -291,5 +300,8 @@ async def get_next_version() -> int:
     db_client = await create_db_client()
     version = await db_client.get_largest_version()
     await db_client.cleanup()
-    return version + 1
+    try:
+        return version + 1
+    except TypeError:  # If version is None.
+        return 0
 
