@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 
 import gym
-from gym.envs.registration import register
+# from gymnasium.envs.registrations import register
 import numpy as np
 from gym import spaces
 
@@ -197,8 +197,8 @@ if hasattr(__loader__, 'name'):
 elif hasattr(__loader__, 'fullname'):
   module_path = __loader__.fullname
 
-register(
-    id='Factorio-v0',
-    entry_point=module_path + ':FactorioEnv',
-    max_episode_steps=15000,
-)
+# register(
+#     id='Factorio-v0',
+#     entry_point=module_path + ':FactorioEnv',
+#     max_episode_steps=15000,
+# )

@@ -34,6 +34,11 @@ class PlaceObject(Tool):
         :param exact: If True, place entity at exact position, else place entity at nearest possible position
         :return: Entity object
         """
+        print(f"DEBUG: Received entity: {entity}")
+        print(f"DEBUG: entity type: {type(entity)}")
+        print(f"DEBUG: Prototype reference in this scope: {Prototype}")
+        print(f"DEBUG: entity.__class__ == Prototype: {entity.__class__ == Prototype}")
+        print(f"DEBUG: isinstance(entity, Prototype): {isinstance(entity, Prototype)}")
 
         #if not isinstance(entity, Prototype):
         #    raise ValueError("The first argument must be a Prototype object")

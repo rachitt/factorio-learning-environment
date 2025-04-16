@@ -2,10 +2,11 @@ import asyncio
 import argparse
 import multiprocessing
 from dotenv import load_dotenv
-from agents.basic_agent import BasicAgent
+# from agents.basic_agent import BasicAgent
 from eval.open.independent_runs.trajectory_runner import run_process, get_next_version, create_factorio_instance, EvalConfig
 from eval.tasks.task_factory import TaskFactory
 from pathlib import Path
+from agents.train_agent import NullAgent
 import json
 load_dotenv()
 from cluster.local.cluster_ips import get_local_container_ips
@@ -35,7 +36,10 @@ def main():
     processes = []
     for run_idx, run_config in enumerate(run_configs):
         task = TaskFactory.create_task(run_config["task"])
-        agent = BasicAgent(model=run_config["model"], system_prompt=system_prompt, task = task)
+        # Only use tasks that define create_env()
+        
+        env = task.create_env(instance)
+        agent = NullAgent(env)
         if "version" in run_config:
             version = run_config["version"]
         else:

@@ -3,6 +3,7 @@ from env.src.entities import Inventory, Entity
 from env.src.instance import FactorioInstance
 from eval.tasks.task_abc import TaskABC
 from env.src.utils.achievements import eval_program_with_achievements
+from env.src.gym.factorio_environment import FactorioEnv
 from models.game_state import GameState
 import copy
 from agents import TaskResponse
@@ -16,7 +17,8 @@ class DefaultTask(TaskABC):
                          all_technology_reserached=False)
         self.starting_game_state = None
         
-    
+    def create_env(self, instance: FactorioInstance):
+        return FactorioEnv(instance, self)
     def verify(self, score: float, instance: FactorioInstance, step_statistics: Dict) -> TaskResponse:
         return TaskResponse(success = False,
                             meta = {})

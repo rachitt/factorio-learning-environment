@@ -21,7 +21,7 @@ services:
     - PORT=34197
     - RCON_PORT=27015
     image: factorio
-    platform: linux/amd64
+    platform: linux/arm64
     ports:
     - 34197:34197/udp
     - 27000:27015/tcp

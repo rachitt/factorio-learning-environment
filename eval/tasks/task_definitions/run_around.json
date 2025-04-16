@@ -1,0 +1,9 @@
+{
+    "task_type": "default",
+    "config": {
+      "trajectory_length": 100,
+      "goal_description": "Test movement via default task.",
+      "task_key": "run_around"
+    }
+  }
+  

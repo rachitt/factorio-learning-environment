@@ -17,6 +17,8 @@ sqlite3:
 
 openplay:
 	uv run python eval/open/independent_runs/run.py --run_config=eval/open/independent_runs/run_config_example_open_play.json
+null-run:
+	uv run python eval/open/independent_runs/run.py --run_config=eval/open/independent_runs/run_config.json
 
 test:
 	uv run python -m pytest env/tests
